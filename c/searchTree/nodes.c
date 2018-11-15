@@ -81,11 +81,11 @@ void removeNode(node_t *root, int key) {
 		// do nothing and return
 		return;
 	}
-	// if one child of n is external node
 
+	// if one child of n is external node
+	// we must know which child is the external node so we can work with its sibling
 	if (n->left->key == EXTERNAL) {
-		// remove n and n->left and replace with n->right
-		// use parent pointer to do this!
+		// we must know if n is its parent's left or right child
 		if (n->parent->left == n) { 
 		// if n is its parents left child, link that parent to n's right child
 			n->parent->left = n->right;
@@ -109,7 +109,6 @@ void removeNode(node_t *root, int key) {
 		}		
 	}
 	else if (n->right->key != EXTERNAL && n->right->key != EXTERNAL) {
-
 		// both children of n are internal nodes
 
 		// find the left-most node in n's right subtree
@@ -124,23 +123,14 @@ void removeNode(node_t *root, int key) {
 			y = y->left;
 		}
 
-		// save element in n to temp
-		// tmp = n->key;
-		// move item of y into n
 		n->key = y->key;
 		
-		// remove y's left child (an external node) from tree
-		// remove y from tree
-
-		// repeplace y with its external node left child's sibling
+		// remove y from the tree
+		// replace y with its external node left child's sibling
 		y->parent->right = y->right;
 
 		y->right->parent = y->parent;
-		printf("ugh");
-return;
-		// free(y);
-
-		// temp has the removed key, return it if you want
+		free(y);
 	}
 
 	// if both of n's children are internal nodes 
