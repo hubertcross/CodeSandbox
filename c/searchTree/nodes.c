@@ -13,12 +13,12 @@ typedef struct node {
 
 typedef struct tree {
 	node_t *root;
-} tree;
+} tree_t;
 
-tree * init() {
-	// node_t *root = malloc(sizeof(node_t));
+tree_t * init() {
+	/* node_t *root = malloc(sizeof(node_t)); */
 	node_t *root = NULL;
-	tree *tree = malloc(sizeof(tree));
+	tree_t *tree = malloc(sizeof(tree_t));
 
 	tree->root = root;
 
@@ -155,13 +155,14 @@ void removeNode(node_t *root, int key) {
 }
 
 void inOrder(node_t *node, int depth) {
+	int i;
 	// printf("wtf");
 	if (node == NULL) {
 		return;
 	}
 	inOrder(node->left, depth + 1);
 	// visit
-	int i;
+	
 	if (node->key != EXTERNAL) {
 		for (i = 0; i < depth; i++) {
 			printf("    ");
@@ -173,7 +174,7 @@ void inOrder(node_t *node, int depth) {
 
 int main(int argc, char *argv[]) {
 
-	tree * tree = init();
+	tree_t *tree = init();
 
 	node_t *ptr = tree->root;
 	node_t *n;
@@ -208,15 +209,15 @@ int main(int argc, char *argv[]) {
 	// inOrder(ptr, 0);
 	// printf("\n\n");
 
-	node_t *ugh = treeSearch(ptr, 9);
-	printf("ugh: %i\n", ugh->key);
-	printf("ugh: %x %x\n", ugh->left, ugh->right);
-	printf("ugh: %i %i\n", ugh->left->key, ugh->right->key);
+	// node_t *ugh = treeSearch(ptr, 9);
+	// printf("ugh: %i\n", ugh->key);
+	// printf("ugh: %x %x\n", ugh->left, ugh->right);
+	// printf("ugh: %i %i\n", ugh->left->key, ugh->right->key);
 
-	ugh = treeSearch(ptr, 5);
-	printf("ugh: %i\n", ugh->key);
-	printf("ugh: %x %x\n", ugh->left, ugh->right);
-	printf("ugh: %i %i\n", ugh->left->key, ugh->right->key);	
+	// ugh = treeSearch(ptr, 5);
+	// printf("ugh: %i\n", ugh->key);
+	// printf("ugh: %x %x\n", ugh->left, ugh->right);
+	// printf("ugh: %i %i\n", ugh->left->key, ugh->right->key);	
 
 	removeNode(ptr, 3);
 	inOrder(ptr, 0);
@@ -228,26 +229,26 @@ int main(int argc, char *argv[]) {
 	printf("\n\n");
 	inOrder(ptr, 0);
 
-		ugh = treeSearch(ptr, 9);
-	printf("ugh: %i\n", ugh->key);
-	printf("ugh: %x %x\n", ugh->left, ugh->right);
-	printf("ugh: %i %i\n", ugh->left->key, ugh->right->key);	
+	// 	ugh = treeSearch(ptr, 9);
+	// printf("ugh: %i\n", ugh->key);
+	// printf("ugh: %x %x\n", ugh->left, ugh->right);
+	// printf("ugh: %i %i\n", ugh->left->key, ugh->right->key);	
 
-	printf("ugh: %x %i\n", ugh->parent, ugh->parent->key);
+	// printf("ugh: %x %i\n", ugh->parent, ugh->parent->key);
 
-		ugh = treeSearch(ptr, 1);
-	printf("ugh: %i\n", ugh->key);
-	printf("ugh: %x %x\n", ugh->left, ugh->right);
-	printf("ugh: %i %i\n", ugh->left->key, ugh->right->key);	
+	// 	ugh = treeSearch(ptr, 1);
+	// printf("ugh: %i\n", ugh->key);
+	// printf("ugh: %p %p\n", (void *) ugh->left, (void *) ugh->right);
+	// printf("ugh: %i %i\n", ugh->left->key, ugh->right->key);	
 
 	removeNode(ptr, 9);
 	printf("\n\n");
 	inOrder(ptr, 0);
 
-	ugh = treeSearch(ptr, 1);
-	printf("ugh: %i\n", ugh->key);
-	printf("ugh: %x %x\n", ugh->left, ugh->right);
-	printf("ugh: %i %i\n", ugh->left->key, ugh->right->key);	
+	// ugh = treeSearch(ptr, 1);
+	// printf("ugh: %i\n", ugh->key);
+	// printf("ugh: %x %x\n", ugh->left, ugh->right);
+	// printf("ugh: %i %i\n", ugh->left->key, ugh->right->key);	
 
 	removeNode(ptr, 1);
 	printf("\n\n");
