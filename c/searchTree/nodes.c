@@ -109,19 +109,36 @@ void removeNode(node_t *root, int key) {
 		}		
 	}
 	else if (n->right->key != EXTERNAL && n->right->key != EXTERNAL) {
+
 		// both children of n are internal nodes
 
 		// find the left-most node in n's right subtree
 		// (next node after n in an inorder traversal)
 		// let this be y
 
-
+		// move into n's right subtree
+		// int tmp;
+		node_t *y = n->right;
+		// find left-most internal node in n's right subtree
+		while (y->left->key != EXTERNAL) {
+			y = y->left;
+		}
 
 		// save element in n to temp
+		// tmp = n->key;
 		// move item of y into n
-
+		n->key = y->key;
+		
 		// remove y's left child (an external node) from tree
 		// remove y from tree
+
+		// repeplace y with its external node left child's sibling
+		y->parent->right = y->right;
+
+		y->right->parent = y->parent;
+		printf("ugh");
+return;
+		// free(y);
 
 		// temp has the removed key, return it if you want
 	}
@@ -155,7 +172,7 @@ int main(int argc, char *argv[]) {
 
 	// special case for root node
 	ptr = malloc(sizeof(node_t));
-	ptr->parent = NULL;
+	ptr->parent = ptr;
 	ptr->left = NULL;
 	ptr->right = NULL;
 	ptr->key = EXTERNAL;
@@ -169,12 +186,18 @@ int main(int argc, char *argv[]) {
 	insert(ptr, 9);
 	insert(ptr, 5);
 	insert(ptr, 7);
-	insert(ptr, 2);
+	// insert(ptr, 2);
 
 	// n = treeSearch(ptr, 2);
 	// printf("ugh: %i\n", n->key);
 
 	inOrder(ptr, 0);
+
+	removeNode(ptr, 2);
+	printf("\n\n");
+
+		inOrder(ptr, 0);
+
 }
 
 
