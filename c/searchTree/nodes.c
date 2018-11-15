@@ -82,6 +82,25 @@ void removeNode(node_t *root, int key) {
 		return;
 	}
 
+	// if n is root node (root node is its own parent)
+	if (n == n->parent) {
+		if (n->right->key == EXTERNAL && n->left->key == EXTERNAL) {
+			n->key = EXTERNAL;
+			n->right = NULL;
+			n->left = NULL;
+			return;
+		}
+		else if (n->right->key == EXTERNAL && n->left->key != EXTERNAL) {
+			n->key = n->left->key;
+			n->left = n->left->left;
+			return;
+		}
+		else if (n->left->key == EXTERNAL && n->right->key != EXTERNAL) {
+			n->key = n->right->key;
+			n->right = n->right->right;
+			return;
+		}
+	}
 	// if one child of n is external node
 	// we must know which child is the external node so we can work with its sibling
 	if (n->left->key == EXTERNAL) {
@@ -114,9 +133,6 @@ void removeNode(node_t *root, int key) {
 		// find the left-most node in n's right subtree
 		// (next node after n in an inorder traversal)
 		// let this be y
-
-		// move into n's right subtree
-		// int tmp;
 		node_t *y = n->right;
 		// find left-most internal node in n's right subtree
 		while (y->left->key != EXTERNAL) {
@@ -126,14 +142,16 @@ void removeNode(node_t *root, int key) {
 		n->key = y->key;
 		
 		// remove y from the tree
-		// replace y with its external node left child's sibling
-		y->parent->right = y->right;
-
+		// replace y with its (external child node)'s sibling
 		y->right->parent = y->parent;
-		free(y);
+		if (y == y->parent->left) {
+			y->parent->left = y->right;
+		}
+		else if(y == y->parent->right) {
+			y->parent->right = y->right;
+		}
+		y = y->right;
 	}
-
-	// if both of n's children are internal nodes 
 }
 
 void inOrder(node_t *node, int depth) {
@@ -182,11 +200,71 @@ int main(int argc, char *argv[]) {
 	// printf("ugh: %i\n", n->key);
 
 	inOrder(ptr, 0);
-
-	removeNode(ptr, 2);
 	printf("\n\n");
+	removeNode(ptr, 2);
+	inOrder(ptr, 0);
+	printf("\n\n");
+	// removeNode(ptr, 7);
+	// inOrder(ptr, 0);
+	// printf("\n\n");
 
-		inOrder(ptr, 0);
+	node_t *ugh = treeSearch(ptr, 9);
+	printf("ugh: %i\n", ugh->key);
+	printf("ugh: %x %x\n", ugh->left, ugh->right);
+	printf("ugh: %i %i\n", ugh->left->key, ugh->right->key);
+
+	ugh = treeSearch(ptr, 5);
+	printf("ugh: %i\n", ugh->key);
+	printf("ugh: %x %x\n", ugh->left, ugh->right);
+	printf("ugh: %i %i\n", ugh->left->key, ugh->right->key);	
+
+	removeNode(ptr, 3);
+	inOrder(ptr, 0);
+	removeNode(ptr, 5);
+	printf("\n\n");
+	inOrder(ptr, 0);
+
+	removeNode(ptr, 7);
+	printf("\n\n");
+	inOrder(ptr, 0);
+
+		ugh = treeSearch(ptr, 9);
+	printf("ugh: %i\n", ugh->key);
+	printf("ugh: %x %x\n", ugh->left, ugh->right);
+	printf("ugh: %i %i\n", ugh->left->key, ugh->right->key);	
+
+	printf("ugh: %x %i\n", ugh->parent, ugh->parent->key);
+
+		ugh = treeSearch(ptr, 1);
+	printf("ugh: %i\n", ugh->key);
+	printf("ugh: %x %x\n", ugh->left, ugh->right);
+	printf("ugh: %i %i\n", ugh->left->key, ugh->right->key);	
+
+	removeNode(ptr, 9);
+	printf("\n\n");
+	inOrder(ptr, 0);
+
+	ugh = treeSearch(ptr, 1);
+	printf("ugh: %i\n", ugh->key);
+	printf("ugh: %x %x\n", ugh->left, ugh->right);
+	printf("ugh: %i %i\n", ugh->left->key, ugh->right->key);	
+
+	removeNode(ptr, 1);
+	printf("\n\n");
+	inOrder(ptr, 0);
+
+
+	insert(ptr, 2);
+	// printf("ugh: %i\n", ptr->key);
+	insert(ptr, 1);
+	// printf("ugh: %i\n", ptr->left->key);
+	insert(ptr, 3);
+	// printf("ugh: %i\n", ptr->right->key);
+	insert(ptr, 9);
+	insert(ptr, 5);
+	insert(ptr, 7);
+	inOrder(ptr, 0);
+
 
 }
 
