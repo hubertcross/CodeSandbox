@@ -52,22 +52,26 @@ class TwoThreeFourTree :
 	def __init__( self ):
 		self.root = None
 
-	def searchTree( self, node, k):
+	def searchTree( self, node, k, depth):
+		print("depth: %i searchkey: %i # keys in this node: %i. |keys: %s" % ( (depth + 1), k, (len(node.list.keys) ), node.list ))
 		if len(node.list.keys) == 0: # external node (list of keys is empty)
-			return "external node"
+			return "external node. has no keys"
 		if k in node.list:
 			return "key found"
-		# else:
-		# 	return "key not found"
-		elif k < node.list[0]:
-			print("search key is less than first stored key in current node. going left")
-			return self.searchTree(node.children[0], k)
-		# elif k < node.key:
-		# 	return self.searchTree(node.left, k)
-		# elif k > node.key:
-		# 	return self.searchTree(node.right, k)
 
-	# def insert(self, node, k):
+		for i in range(len(node.list.keys)):
+			# print("ugh")
+			print("Check if searchkey %i < %i" % (k, node.list[i]) )
+			if (k < node.list[i]):
+				print("The search key is less than the %ith element. Searching left of %ith element " % (i, i))
+				return self.searchTree(node.children[i], k, depth + 1)
+			# // check the right side of the last key
+		print("Check if searchkey %i > %i" % (k, (node.list[len(node.list.keys) - 1] ) ))
+		if (k > node.list[len(node.list.keys) - 1] ):
+			print("The search key is greater than right-most element of the current node. Search right of final %ith element" % (len(node.list.keys)) )
+			return self.searchTree(node.children[len(node.list.keys)], k, depth + 1)
+
+		# return "key not found"
 
 	def inOrder(self, node, depth):
 		if (node.key == -1):
@@ -81,6 +85,10 @@ class TwoThreeFourTree :
 		print("key: " + str(node.key))
 		self.inOrder(node.right, depth + 1)
 
+
+for i in range(2):
+	print('balls %i' % i)
+
 t = TwoThreeFourTree()
 
 t.root = Node()
@@ -88,8 +96,29 @@ t.root.children.append(Node())
 t.root.children.append(Node())
 
 t.root.addKey(5)
+t.root.addKey(10)
+t.root.children.append(Node())
 
-print(t.searchTree(t.root, 4))
+t.root.children[0].addKey(4)
+
+t.root.children[0].children.append(Node())
+t.root.children[0].children.append(Node())
+
+
+print("new search for key %i" % 3)
+print(t.searchTree(t.root, 3, 0))
+
+print("")
+print("new search for key %i" %  4)
+print(t.searchTree(t.root, 4, 0))
+
+
+print("")
+print("new search for key %i" %  15)
+print(t.searchTree(t.root, 15, 0))
+
+
+# print(t.searchTree(t.root, 15, 0))
 
 # o = OrderedList()
 # o.insert(5)
