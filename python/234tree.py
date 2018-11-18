@@ -19,9 +19,9 @@ class OrderedList :
 
 	def __str__(self):
 		i = 0
-		retstring = "retstring:"
+		retstring = ""
 		while i < len(self.keys):
-			print("balls" + str(i))
+			# print("balls" + str(i))
 			retstring += " "
 			retstring += str(self.keys[i])
 			retstring += " "
@@ -44,50 +44,58 @@ class Node :
 
 	def __str__(self):
 		retstr = ""
-		retstr += "key: "
-		retstr += str(self.key)
+		retstr += "node: "
+		retstr += str(self.list)
 		return retstr
 
 class TwoThreeFourTree :
 	def __init__( self ):
 		self.root = None
 
-	def searchTree( self, node, k, depth):
+	def searchTree( self, node, k, depth, inserting):
+		# if inserting is set to 1, we have to kick middle-keys in 3-key-nodes up to parent ...
 		print("depth: %i searchkey: %i # keys in this node: %i. |keys: %s" % ( (depth + 1), k, (len(node.list.keys) ), node.list ))
-		if len(node.list.keys) == 0: # external node (list of keys is empty)
-			return "external node. has no keys"
+		# if len(node.list.keys) == 0: # external node (list of keys is empty)
+			# return "reached an external (keyless) node. key not found"
+	
 		if k in node.list:
-			return "key found"
+			# return "key found"
+			sys.stdout.write('Found key ->')
+			return node
+		if len(node.children) == 0:
+			print("reached a leaf (childless) node that doesn't contain k, so k is not in the tree")
+			return node
+
 
 		for i in range(len(node.list.keys)):
 			# print("ugh")
 			print("Check if searchkey %i < %i" % (k, node.list[i]) )
 			if (k < node.list[i]):
 				print("The search key is less than the %ith element. Searching left of %ith element " % (i, i))
-				return self.searchTree(node.children[i], k, depth + 1)
+				return self.searchTree(node.children[i], k, depth + 1, inserting)
 			# // check the right side of the last key
 		print("Check if searchkey %i > %i" % (k, (node.list[len(node.list.keys) - 1] ) ))
 		if (k > node.list[len(node.list.keys) - 1] ):
 			print("The search key is greater than right-most element of the current node. Search right of final %ith element" % (len(node.list.keys)) )
-			return self.searchTree(node.children[len(node.list.keys)], k, depth + 1)
-
-		# return "key not found"
-
-	def inOrder(self, node, depth):
-		if (node.key == -1):
-			return
-		self.inOrder(node.left, depth + 1)
-		#visit
-		for i in range(1, depth+ 1):
-			# print("  ", end=' ')
-			sys.stdout.write('   ')
-
-		print("key: " + str(node.key))
-		self.inOrder(node.right, depth + 1)
+			return self.searchTree(node.children[len(node.list.keys)], k, depth + 1, inserting)
 
 
-for i in range(2):
-	print('balls %i' % i)
+	def insert(self, k):
+		# search for they k in the tree
+		# if you find k, keep going 'left' until you reach a leaf node (node with no children)
+		myNode = self.searchTree(self.root, k, 0, 1)
+
+		if k in myNode.list:
+			# go all the way to the left
+			print("K is in the returned node, going left until we hit a leaf node")
+		elif k not in myNode.list:
+			print("K is not in the tree, we can insert it at the current node: ")
+			print(myNode)
+			myNode.addKey(k)
+			print(myNode)
+
+# for i in range(2):
+# 	print('balls %i' % i)
 
 t = TwoThreeFourTree()
 
@@ -100,23 +108,27 @@ t.root.addKey(10)
 t.root.children.append(Node())
 
 t.root.children[0].addKey(4)
+t.root.children[1].addKey(7)
 
-t.root.children[0].children.append(Node())
-t.root.children[0].children.append(Node())
+t.root.children[2].addKey(17)
+
+# t.root.children[0].children.append(Node())
+# t.root.children[0].children.append(Node())
 
 
 print("new search for key %i" % 3)
-print(t.searchTree(t.root, 3, 0))
+print(t.searchTree(t.root, 3, 0, 0))
 
 print("")
 print("new search for key %i" %  4)
-print(t.searchTree(t.root, 4, 0))
+print(t.searchTree(t.root, 4, 0, 0))
 
 
 print("")
 print("new search for key %i" %  15)
-print(t.searchTree(t.root, 15, 0))
+print(t.searchTree(t.root, 15, 0, 0))
 
+t.insert(3)
 
 # print(t.searchTree(t.root, 15, 0))
 
