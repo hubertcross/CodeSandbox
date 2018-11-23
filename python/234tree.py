@@ -100,6 +100,7 @@ class TwoThreeFourTree :
 		# print("hubert")
 		# print(parentNode)
 		# print(node)
+		root3node = 0
 		if not hasattr(node, 'list'):
 			print("External node reached")
 			return parentNode
@@ -116,7 +117,16 @@ class TwoThreeFourTree :
 			if len(node.list.keys) == 3:
 				print("Node has three keys, since we're doing an insert we're gonna restructure")
 				print("debug0 %s" % node.list)
-				# move the middle key to the parent 
+
+				
+				# if parent is None, we're dealing with the root node and a new node must be created
+				if parentNode == None:
+					root3node = 1
+					parentNode = Node()
+					self.root = parentNode
+					node.parent = parentNode
+					self.root.children[0] = node
+				# move the middle key to the parent
 				parentNode.addKey(node.list.keys.pop(1))
 				print("debug1 %s" % node.list)
 
@@ -124,8 +134,21 @@ class TwoThreeFourTree :
 				newSibling = Node()
 				newSibling.parent = parentNode # sib has same parent of course
 				print("debug2 %s" % node.list)
-				newSibling.addKey(node.list.keys.pop(1)) # move current's third key to sibling
-				print("debug3")
+				#### IT'S NOT ALWAYS THE THIRD KEY
+				#### IF THE 3NODE IS ITS PARENTS 
+				if node == node.parent.children[0]:
+					print("bleh0")
+					newSibling.addKey(node.list.keys.pop(1)) # move current's third key to sibling
+				elif node == node.parent.children[1]:
+					if len(node.list.keys) == 2:
+						print("BLEH1")
+						newSibling.addKey(node.list.keys.pop(0)) # test if same case as above works
+						parentNode.children[2] = node
+				elif node == parentNode.children[2]:
+					print("3node is parent's rightmost child")
+					newSibling.addKey(node.list.keys.pop(0)) # move current's first key into new sibling
+				print("debug3 %s" % node.list)
+				print("root: %s" % self.root)
 				# print(newSibling)
 				# print(newSibling.parent)
 				# if len(node.children) == 3:
@@ -148,7 +171,8 @@ class TwoThreeFourTree :
 				for child in newSibling.children:
 					print("child: %s" % child)
 
-	
+		if root3node: # if the root node a 3node, let's start over from new root
+			node = self.root
 		if k in node.list:
 			# return "key found"
 			sys.stdout.write('Found key ->')
@@ -254,13 +278,33 @@ t.insert(4)
 t.insert(3)
 t.insert(10)
 t.insert(15)
+t.insert(5)
+t.insert(1)
+t.insert(17)
+t.insert(19)
+t.insert(2)
+t.insert(6)
 
 print("root:")
 print(t.root)
-# print("root's first child")
-# print(t.root.children[0])
+print("root's first child")
+print(t.root.children[0])
+print(t.root.children[1])
+print(t.root.children[2])
+print(t.root.children[3])
 # print("root's first grandchild")
-# print(t.root.children[0].children[1])
+print(t.root.children[0].children[0])
+print(t.root.children[0].children[1])
+print(t.root.children[0].children[2])
+print(t.root.children[0].children[3])
+print(t.root.children[1].children[0])
+print(t.root.children[1].children[1])
+print(t.root.children[1].children[2])
+print(t.root.children[1].children[3])
+# print(t.root.children[3].children[0])
+# print(t.root.children[3].children[1])
+# print(t.root.children[3].children[2])
+# print(t.root.children[3].children[3])
 # print("root's second grandchild")
 # print(t.root.children[0].children[3])
 
